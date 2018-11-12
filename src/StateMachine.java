@@ -1,17 +1,35 @@
 public class StateMachine {
 
   public static boolean binMachine(String input) {
-    // TODO
-    return false;
+    int i = 0;
+    while (i < input.length()) {
+      char c = input.charAt(i);
+      if (c != '0' && c != '1') {
+        return false;
+      }
+      i = i + 1;
+    }
+    return true;
   }
 
   public static int binConvMachine(String input) {
-    // TODO
-    return -1;
+    int i = 0;
+    int acc = 0;
+    if (!binMachine(input)) {
+      return -1;
+    }
+    while (i < input.length()) {
+      char c = input.charAt(input.length() - i - 1);
+      if (c == '1') {
+        acc += Math.pow(2, i);
+      }
+      i = i + 1;
+    }
+    return acc;
   }
 
   public static boolean numMachine(String input) {
-    // TODO
+    
     return false;
   }
 
