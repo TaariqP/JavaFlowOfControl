@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class StateMachine {
@@ -224,9 +226,84 @@ public class StateMachine {
     return true;
   }
 
-  public static double calcMachine(String input) {
+  private static String removeSpaces(String input) {
+    StringBuilder string = new StringBuilder("");
     for (int i = 0; i < input.length(); i++) {
-      
+      char c = input.charAt(i);
+      if (c != ' ') {
+        string.append(c);
+      }
+    }
+    return string.toString();
+  }
+
+  private static ArrayList getOperators(String input) {
+    ArrayList operators = new ArrayList();
+    for (int i = 0; i < input.length(); i++) {
+      char c = input.charAt(i);
+      if (Character.toString(c).matches("[-+*/=]")) {
+        operators.add(c);
+      }
+    }
+    return operators;
+  }
+
+  private static ArrayList getNums(String input) {
+    String[] nums = input.split("[-+*/=]");
+    ArrayList<String> newNums = new ArrayList<>();
+    for (String num : nums) {
+      if (!num.equals("")) {
+        newNums.add(num);
+      }
+    }
+    return newNums;
+  }
+
+
+
+  public static double calcMachine(String input) {
+    input = removeSpaces(input);
+    double result = 0;
+    ArrayList<Character> ops = getOperators(input);
+    if (ops.get(ops.size() - 1) != '=') {
+      return Double.NaN;
+    }
+    ArrayList<String> nums = getNums(input);
+    if (nums.size() != ops.size()) {
+      return Double.NaN;
+    }
+
+    ArrayList<Double> values = new ArrayList();
+    for (String num : nums) {
+      if (!num.equals("")) {
+        double num1 = Double.parseDouble(num);
+        values.add(num1);
+      }
+    }
+
+    result += values.get(0);
+
+    for (int i = 0; i < ops.size(); i++) {
+      char c = ops.get(i);
+      if (c == '=') {
+        return result;
+      }
+      double num1 = values.get(i);
+      double num2 = values.get(i + 1);
+      switch (c) {
+        case '+':
+          result = result + num2;
+          break;
+        case '-':
+          result = result - num2;
+          break;
+        case '*':
+          result = result * num2;
+          break;
+        case '/':
+          result = result / num2;
+          break;
+      }
     }
     return Double.NaN;
   }
